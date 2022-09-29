@@ -17,3 +17,8 @@ export enum GroupType {
     Heterogene,
     Homogene,
 }
+
+export enum GroupSelection {
+    GroupSize,
+    GroupNumber
+}

@@ -67,7 +67,6 @@ function registerValidSW (swUrl: string, config?: Config) {
           return;
         }
         installingWorker.onstatechange = () => {
-          alert(installingWorker.state)
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
               // At this point, the updated precached content has been fetched,
@@ -87,7 +86,6 @@ function registerValidSW (swUrl: string, config?: Config) {
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
               console.log('Content is cached for offline use.');
-              alert("Content is cached")
 
               // Execute callback
               if (config && config.onSuccess) {

@@ -16,12 +16,12 @@ export class HeterogeneGroup extends Group {
 
     addMember (level: number, count = 1) {
         super.addMember(level, count)
-        this.weighted += level * count;
+        this.weighted += (level + 1) * count;
     }
 
     removeMember (level: number, count = 1) {
         super.removeMember(level, count)
-        this.weighted -= level * count;
+        this.weighted -= (level + 1) * count;
     }
 
     computeMaxPoints (studentNr: number) {
@@ -44,7 +44,7 @@ export class HeterogeneGroup extends Group {
         let bestLevel: number = 0;
         let bestDiff: number = diff;
         let bestArr: number[] = [];
-        for (let l = 1; l <= levelNumbers; l++) {
+        for (let l = 1; l < levelNumbers; l++) {
             const [arr, currDiff] = this.calculateShiftPoss(other, l, diff);
 
             if (currDiff < bestDiff) {

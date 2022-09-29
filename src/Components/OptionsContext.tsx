@@ -1,11 +1,13 @@
 import { useState, createContext, useContext, useEffect } from 'react';
 import { useThopic } from './DataContext';
-import { GroupType } from './types';
+import { GroupSelection, GroupType } from './types';
 
-interface Options {
+export interface Options {
   groupSize: number;
+  groupNumber: number;
   groupType: GroupType;
   thopicId: number;
+  groupSelection: GroupSelection;
 }
 
 type OptionsProviderType = {
@@ -15,8 +17,10 @@ type OptionsProviderType = {
 
 const defaultOptions: Options = {
   groupSize: 3,
+  groupNumber: 3,
   groupType: GroupType.Heterogene,
   thopicId: 1,
+  groupSelection: GroupSelection.GroupSize,
 };
 
 const OptionsContext = createContext<OptionsProviderType>(

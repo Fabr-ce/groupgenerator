@@ -111,95 +111,7 @@ export class HomogeneGroup extends Group {
             prevGroup.subtractGroup(currGroup)
             assignment.unshift(prevGroup)
         }
-        assignment.sort((a, b) => b.count - a.count)
-        console.log(assignment)
         return assignment
-
-
-
-
-
-        /*const withoutRestDiff: number[] = new Array(Math.floor(this.count / groupSize));
-        const withoutRestGroup: HomogeneGroup[] = new Array(Math.floor(this.count / groupSize));
-
-        const withRestDiff: number[] = new Array(Math.ceil(this.count / groupSize));
-        const withRestGroup: HomogeneGroup[] = new Array(Math.ceil(this.count / groupSize));
-
-        if (withoutRestDiff.length === 0) {
-            return [this];
-        }
-
-        withoutRestGroup[0] = this.clone()
-        const lowLevelsNo = withoutRestGroup[0].getLowestLevels(groupSize)
-        withoutRestDiff[0] = lowLevelsNo.maxDiff
-
-        for (let i = 1; i < withoutRestDiff.length; i++) {
-            withoutRestGroup[i] = withoutRestGroup[i - 1].clone()
-            const lowestLevels = withoutRestGroup[i].getLowestLevels(groupSize)
-            withoutRestDiff[i] = Math.max(lowestLevels.maxDiff, withoutRestDiff[i - 1])
-        }
-
-        const assignment: Group[] = [];
-
-        if (restNr === 0) {
-            let last: Group = this;
-            for (const restGroup of withoutRestGroup) {
-                last.subtractGroup(restGroup)
-                assignment.push(last)
-                last = restGroup
-            }
-            return assignment
-        }
-
-        const tookRest = [];
-        withRestGroup[0] = this.clone()
-        const lowLevelsYes = withRestGroup[0].getLowestLevels(restNr)
-        withRestDiff[0] = lowLevelsYes.maxDiff
-        tookRest[0] = true
-
-        for (let i = 1; i < withRestDiff.length; i++) {
-            const useRest = withoutRestGroup[i - 1].clone()
-            const useNormal = withRestGroup[i - 1].clone()
-
-            const restSelfDiff = useRest.getLowestLevels(restNr).maxDiff;
-            const normalSelfDiff = useNormal.getLowestLevels(groupSize).maxDiff;
-
-            const restDiff = Math.max(restSelfDiff, withoutRestDiff[i - 1])
-            const normalDiff = Math.max(normalSelfDiff, withRestDiff[i - 1])
-
-            const allSame = restDiff === normalDiff && restSelfDiff === normalSelfDiff
-            const tieBreak = Math.random() < .5;
-            const restSmaller = restDiff < normalDiff || (restDiff === normalDiff && restSelfDiff < normalSelfDiff) || (allSame && tieBreak)
-
-            if (restSmaller) {
-                withRestDiff[i] = restDiff;
-                withRestGroup[i] = useRest;
-                tookRest[i] = true
-            } else {
-                withRestDiff[i] = normalDiff;
-                withRestGroup[i] = useNormal;
-                tookRest[i] = false
-            }
-        }
-
-
-
-        let last: Group = withRestGroup[withRestGroup.length - 1];
-        let hasRest = tookRest[tookRest.length - 1];
-        for (let i = withRestGroup.length - 2; i >= 0; i--) {
-            const restGroup = withRestGroup[i];
-            const withoutGroup = withoutRestGroup[i];
-            const usedGroup = hasRest ? withoutGroup : restGroup;
-            const usedClone = usedGroup.clone()
-            usedClone.subtractGroup(last)
-            assignment.push(usedClone)
-            last = usedGroup
-            hasRest ||= tookRest[i];
-        }
-        this.subtractGroup(last)
-        assignment.push(this)
-        assignment.sort((a, b) => b.count - a.count)
-        return assignment*/
     }
 
     getLowestLevels (number: number) {
@@ -208,7 +120,6 @@ export class HomogeneGroup extends Group {
         while (nrLeft > 0) {
             const minNr = this.getLevelCount(this.minLevel)
             if (minNr === 0) {
-                console.log(this)
                 throw new Error("Something went wrong")
             }
 

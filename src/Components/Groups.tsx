@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import main from '../Logic/main';
 import { useStudent } from './DataContext';
 import { useOptions } from './OptionsContext';
-import { StudentType } from './types';
+import { GroupSelection, StudentType } from './types';
 
 export default function Groups() {
   const { options } = useOptions();
@@ -14,7 +14,9 @@ export default function Groups() {
   const generateAssignemnt = useCallback(() => {
     if (students.length === 0) return;
     const assignment = main({
+      groupSelection: options.groupSelection,
       groupSize: options.groupSize,
+      groupNumber: options.groupNumber,
       groupType: options.groupType,
       students,
       thopicId: options.thopicId,
@@ -49,9 +51,27 @@ export default function Groups() {
           </div>
         ))}
 
-        <div className='btn btn-block' onClick={generateAssignemnt}>
-          Durchmischen
-        </div>
+        {groupAssignment.length > 0 && (
+          <div className='btn btn-block' onClick={generateAssignemnt}>
+            Durchmischen
+          </div>
+        )}
+        {groupAssignment.length === 0 && students.length !== 0 && (
+          <>
+            {options.groupSelection === GroupSelection.GroupSize && (
+              <div className='alert alert-warning'>
+                Es wurde keine gute Aufteilung gefunden die {students.length}{' '}
+                Schüler/innen in {options.groupSize}er Gruppen aufteilt.
+              </div>
+            )}
+            {options.groupSelection === GroupSelection.GroupNumber && (
+              <div className='alert alert-warning'>
+                Es wurde keine gute Aufteilung gefunden die {students.length}{' '}
+                Schüler/innen in {options.groupNumber} Gruppen aufteilt.
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

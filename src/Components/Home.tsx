@@ -3,9 +3,9 @@ import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import { Loading } from './Loading';
 import { useStudent, useThopic } from './DataContext';
-import { GroupType } from './types';
+import { GroupSelection, GroupType } from './types';
 import { useOptions } from './OptionsContext';
-import { IoMdSettings } from 'react-icons/io';
+import { IoMdSettings, IoMdSwap } from 'react-icons/io';
 
 export default function Home() {
   const { options, changeOptions } = useOptions();
@@ -28,26 +28,57 @@ export default function Home() {
         </Link>
       </div>
       <div className='max-w-xs mx-auto'>
-        <Link to='/students' className='btn btn-block bg-primary mb-1'>
+        <Link to='/students' className='btn btn-block bg-primary mb-4'>
           Klasse bearbeiten{' '}
           {!loadS && '(' + students.length + '/' + all.length + ')'}
         </Link>
 
-        <div className='form-control w-full'>
-          <label className='label'>
-            <span className='label-text'>
-              Wie viele Schüler/innen pro Gruppe
-            </span>
-          </label>
-          <select
-            className='select select-bordered w-full'
-            value={options.groupSize}
-            onChange={handleChange('groupSize')}
+        <div className='w-full flex gap-2 items-end'>
+          {options.groupSelection === GroupSelection.GroupSize ? (
+            <div className='form-control flex-grow'>
+              <label className='label'>
+                <span className='label-text'>
+                  Wie viele Schüler/innen pro Gruppe?
+                </span>
+              </label>
+              <select
+                className='select select-bordered w-full'
+                value={options.groupSize}
+                onChange={handleChange('groupSize')}
+              >
+                {new Array(9).fill(0).map((z, i) => (
+                  <option key={i}>{i + 2}</option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <div className='form-control flex-grow'>
+              <label className='label'>
+                <span className='label-text'>Wie viele Gruppen?</span>
+              </label>
+              <select
+                className='select select-bordered w-full'
+                value={options.groupNumber}
+                onChange={handleChange('groupNumber')}
+              >
+                {new Array(9).fill(0).map((z, i) => (
+                  <option key={i}>{i + 2}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div
+            className='btn btn-square'
+            onClick={() =>
+              changeOptions({
+                ...options,
+                groupSelection: 1 - options.groupSelection,
+              })
+            }
           >
-            {new Array(9).fill(0).map((z, i) => (
-              <option key={i}>{i + 2}</option>
-            ))}
-          </select>
+            <IoMdSwap size='2em' />
+          </div>
         </div>
 
         <div className='pt-5'>
