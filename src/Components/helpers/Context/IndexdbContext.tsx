@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import IndexedDB from './db';
-import { ThopicType } from './types';
+import { ThopicType } from '../types';
 
 const IndexDBContext = createContext<{
   loading: boolean;

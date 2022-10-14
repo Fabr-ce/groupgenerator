@@ -1,6 +1,6 @@
 import React from 'react';
-import { useStudent } from './DataContext';
-import { StudentType, ThopicType } from './types';
+import { useStudent } from '../helpers/Context/DataContext';
+import { StudentType, ThopicType } from '../helpers/types';
 
 enum LevelName {
   G,

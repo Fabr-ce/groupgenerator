@@ -1,4 +1,4 @@
-import { levelNumbers } from '../Components/ThopicSelector';
+import { levelNumbers } from '../Components/Students/ThopicSelector';
 
 export class Group {
     encoding: number[];

@@ -6,7 +6,7 @@ import {
   useChangeItem,
   useDeleteItem,
 } from './IndexdbContext';
-import { StudentType, ThopicType } from './types';
+import { StudentType, ThopicType } from '../types';
 
 interface ItemType {
   id: number;

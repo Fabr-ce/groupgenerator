@@ -1,5 +1,5 @@
-import { StudentType } from '../Components/types';
-import { levelNumbers, defaultLevel, levels } from "../Components/ThopicSelector"
+import { StudentType } from '../Components/helpers/types';
+import { defaultLevel, levelNumbers, levels } from '../Components/Students/ThopicSelector';
 import { chooseRandomElem } from './helper';
 import { Group } from './Group';
 

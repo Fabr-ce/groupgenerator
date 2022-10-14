@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { MdOutlineArrowBack } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import main from '../Logic/main';
-import { useStudent } from './DataContext';
-import { useOptions } from './OptionsContext';
-import { GroupSelection, StudentType } from './types';
+import main from '../../Logic/main';
+import { useStudent, useOptions } from '../helpers/Context/index';
+import { GroupSelection, StudentType } from '../helpers/types';
 
 export default function Groups() {
   const { options } = useOptions();

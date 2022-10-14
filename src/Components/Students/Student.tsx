@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { BiShow, BiHide } from 'react-icons/bi';
 import classnames from 'classnames';
-import { StudentType, ThopicType } from './types';
+import { StudentType, ThopicType } from '../helpers/types';
 import { ThopicSelector } from './ThopicSelector';
-import { DeleteModal, EditModal } from './Modal';
-import { useStudent } from './DataContext';
+import { DeleteModal, EditModal } from '../helpers/Modal';
+import { useStudent } from '../helpers/Context/index';
 
 export const Student = ({
   id,

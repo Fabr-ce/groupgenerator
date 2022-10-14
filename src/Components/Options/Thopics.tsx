@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { EditModal } from './Modal';
+import { EditModal } from '../helpers/Modal';
 import { Thopic } from './Thopic';
-import { Loading } from './Loading';
-import { useThopic } from './DataContext';
+import { Loading } from '../helpers/Loading';
+import { useThopic } from '../helpers/Context/index';
 
 export default function Thopics() {
   const { all: thopics, loading, update: updateThopic } = useThopic();

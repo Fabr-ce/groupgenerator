@@ -1,6 +1,6 @@
 import { useState, createContext, useContext, useEffect } from 'react';
 import { useThopic } from './DataContext';
-import { GroupSelection, GroupType } from './types';
+import { GroupSelection, GroupType } from '../types';
 
 export interface Options {
   groupSize: number;

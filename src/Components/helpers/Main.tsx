@@ -1,12 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { DataProvider } from './DataContext';
-import Groups from './Groups';
-import Home from './Home';
-import { AppContextProvider } from './IndexdbContext';
-import Options from './Options';
-import { OptionsProvider } from './OptionsContext';
-import Students from './Students';
+import {
+  DataProvider,
+  AppContextProvider,
+  OptionsProvider,
+} from '../helpers/Context/index';
+import Groups from '../Groups';
+import Home from '../Home';
+import Options from '../Options';
+import Students from '../Students';
+import Import from '../Import/Import';
 
 export default function Main() {
   return (
@@ -18,6 +21,7 @@ export default function Main() {
               <Route path='/options' element={<Options />} />
               <Route path='/students' element={<Students />} />
               <Route path='/groups' element={<Groups />} />
+              <Route path='/import/:data' element={<Import />} />
               <Route path='/' element={<Home />} />
             </Routes>
           </Router>

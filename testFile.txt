@@ -1,0 +1,25 @@
+Schüler	Sprachen				Mathematik, Natur, Mensch, Gesellschaft			Gestalten, Musik, Bewegung und Sport						Medien und Informatik		Wahlpflicht- und Freifächer			Lern- und Arbeitsverhalten										Sozialverhalten				Zwischenzeugnis			
+	D	E	F		M	NMG		BG	TexG	TechG	Mu	BS		MI		HSK	Rel		Aktivität	Konzentration	Problemlösungen	Ausdauer	Selbstständigkeit	Sorgfalt	Zuverlässigkeit	Kritikfähigkeit	Tempo		Konstruktiv	Respekt	Regeln		Bemerkungen	Entschuldigt	Unentschuldigt	Gespräch
+Lily Sophia Adank	6.0	6.0			6.0											---	---																	1		
+Amir Aliji	6.0	6.0			4.5											---	---																	2		
+Nina Lien Aranya	6.0	6.0			5.0											---	---																			
+Axel Oscar Beszczynski	5.0	4.0														---	---																	5		
+Kevin Bibaj	5.5	4.0			4.0											---	---																			
+Jamie B'fcrgi	6.0	4.5			4.5											---	---																			
+Lara Cecchini	5.0	6.0			3.5											---	---																	13		
+Panagiotis Chalkidis	4.0	3.5			4.0											---	---																			
+Shanna Fedi	6.0	6.0			4.5											---	---																			
+Fatime Fidani	5.0	4.0			4.0											---	---																	2		
+Nias Huber	6.0	5.5			6.0											---	---																			
+Flori Ismani	6.0	5.0			4.0											---	---																			
+Leon Korschikowski	5.5	6.0			4.5											---	---																			
+Vida Mia Martinez-Leis	6.0	6.0			5.0											---	---																	2		
+Joya Selina M'fcller	6.0	6.0			5.5											---	---																	4		
+Diego Palmieri	4.0	6.0			3.0											---	---																			
+Am'e9lie Pfeifer	6.0	6.0			6.0											---	---																			
+Dylan Renda	5.5	5.0			5.0											---	---																			
+Giuliano Romagnoli	5.0	3.5			3.5											---	---																			
+Marlon Schmid	6.0	6.0			4.5											---	---																			
+Pedro Jose Schweizer	5.0	5.5			5.0											---	---																	4		
+Victoriia Markevych																---	---																			
+	5.50	5.26			4.60																													4.13		

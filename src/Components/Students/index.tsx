@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { MdOutlineArrowBack } from 'react-icons/md';
-import { ThopicType } from './types';
+import { ThopicType } from '../helpers/types';
 import { Link } from 'react-router-dom';
 import { Student } from './Student';
-import { EditModal } from './Modal';
-import { Loading } from './Loading';
-import { useStudent, useThopic } from './DataContext';
+import { EditModal } from '../helpers/Modal';
+import { Loading } from '../helpers/Loading';
+import { useStudent, useThopic } from '../helpers/Context/DataContext';
 import { BsPersonPlusFill } from 'react-icons/bs';
 
 export default function Students() {

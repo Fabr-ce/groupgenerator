@@ -1,5 +1,5 @@
-import { Options } from '../Components/OptionsContext';
-import { StudentType, GroupType, GroupSelection } from '../Components/types';
+import { Options } from "../Components/helpers/Context/OptionsContext";
+import { StudentType, GroupType, GroupSelection } from '../Components/helpers/types';
 import calculateHeterogene from './calculateHeterogene';
 import calculateHomogene from './calculateHomogene';
 import { encodeStudents, randomDecodeStudents } from './convertStudent';
@@ -45,7 +45,7 @@ const calculateAssignment = (students: Group, options: Options) => {
 
 
     const fullCount = (students.count - restGroups * (groupSize - 1)) / groupSize
-    if (fullCount < 0 || groupSize === 1 && restGroups > 0) return [];
+    if (fullCount < 0 || (groupSize === 1 && restGroups > 0)) return [];
 
 
     if (options.groupType === GroupType.Heterogene) {

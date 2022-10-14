@@ -1,4 +1,4 @@
-import { levelNumbers } from '../Components/ThopicSelector';
+import { levelNumbers } from '../Components/Students/ThopicSelector';
 import { Group } from './Group';
 
 export class HomogeneGroup extends Group {

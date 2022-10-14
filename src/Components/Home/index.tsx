@@ -1,10 +1,9 @@
 import React from 'react';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
-import { Loading } from './Loading';
-import { useStudent, useThopic } from './DataContext';
-import { GroupSelection, GroupType } from './types';
-import { useOptions } from './OptionsContext';
+import { Loading } from '../helpers/Loading';
+import { useStudent, useThopic, useOptions } from '../helpers/Context/index';
+import { GroupSelection, GroupType } from '../helpers/types';
 import { IoMdSettings, IoMdSwap } from 'react-icons/io';
 
 export default function Home() {

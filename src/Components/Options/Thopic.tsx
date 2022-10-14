@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { BiShow, BiHide } from 'react-icons/bi';
 import classnames from 'classnames';
-import { DeleteModal, EditModal } from './Modal';
-import { ThopicType } from './types';
-import { useThopic } from './DataContext';
+import { DeleteModal, EditModal } from '../helpers/Modal';
+import { ThopicType } from '../helpers/types';
+import { useThopic } from '../helpers/Context/DataContext';
 
 export const Thopic = ({ id, name, active }: ThopicType) => {
   const [showContent, changeContent] = useState(false);
@@ -44,9 +44,15 @@ export const Thopic = ({ id, name, active }: ThopicType) => {
       </div>
       {showContent && (
         <div className='mt-2'>
-          <div className='btn opacity-70 mr-2' onClick={() => changeEdit(true)}>
-            Bearbeiten
-          </div>
+          {id > 3 && (
+            <div
+              className='btn opacity-70 mr-2'
+              onClick={() => changeEdit(true)}
+            >
+              Bearbeiten
+            </div>
+          )}
+
           <div
             className='btn btn-error opacity-70'
             onClick={() => changeDelete(true)}
