@@ -66,14 +66,16 @@ const useItems = <T extends ItemType>(db: string) => {
   }, [pureItems]);
 
   const updateItem = (item: T) => {
-    const newItems = [...items];
-    const currentInd = newItems.findIndex((it) => it.id === item.id);
-    if (currentInd > -1) {
-      newItems[currentInd] = item;
-    } else {
-      newItems.push(item);
-    }
-    changeItems(newItems);
+    changeItems((oldItems) => {
+      const newItems = [...oldItems];
+      const currentInd = newItems.findIndex((it) => it.id === item.id);
+      if (currentInd > -1) {
+        newItems[currentInd] = item;
+      } else {
+        newItems.push(item);
+      }
+      return newItems;
+    });
   };
 
   const update = async (item: T) => {
@@ -86,8 +88,7 @@ const useItems = <T extends ItemType>(db: string) => {
   const remove = async (id: number) => {
     changeSpecific(id);
     await pureDeleteItem(id);
-    const newItems = items.filter((item) => item.id !== id);
-    changeItems(newItems);
+    changeItems((oldItems) => oldItems.filter((item) => item.id !== id));
     changeSpecific(false);
   };
 

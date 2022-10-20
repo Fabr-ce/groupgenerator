@@ -11,17 +11,31 @@ export const importStudentClick = async (
   update: (item: StudentType) => Promise<void>,
   remove: (id: number) => Promise<void>
 ) => {
-  const decodedStr = decode(data);
-  const decodeObj = JSON.parse(decodedStr);
-  const resultStudents = parseStr(decodeObj);
+  let resultStudents = [];
+  try {
+    const decodedStr = decode(data);
+    const decodeObj = JSON.parse(decodedStr);
+    resultStudents = parseStr(decodeObj);
+  } catch (err) {
+    throw new Error(
+      'Fehler beim Laden der Daten. Kopiere deine Klasse bitte nochmals.'
+    );
+  }
+
   await renewStudents(students, resultStudents, update, remove);
 };
 
 export default function ClassImport() {
   const { all: students, update, remove } = useStudent();
   const [open, changeOpen] = useState(false);
+  const [success, changeSuccess] = useState(false);
+  const [error, changeError] = useState('');
   const [data, changeData] = useState('');
-  const toggle = () => changeOpen(!open);
+  const toggle = () => {
+    changeOpen(!open);
+    changeSuccess(false);
+    changeError('');
+  };
 
   return (
     <div>
@@ -34,22 +48,43 @@ export default function ClassImport() {
         Klasse importieren
       </div>
       <Modal title='Klasse importieren' toggle={toggle} open={open}>
-        <form
-          className='p-2'
-          onSubmit={async (e) => {
-            e.preventDefault();
-            await importStudentClick(data, students, update, remove);
-            changeOpen(false);
-          }}
-        >
-          <input
-            className='input mb-2'
-            onChange={(e) => changeData(e.target.value)}
-          ></input>
-          <button type='submit' className='btn btn-primary'>
-            Importieren
-          </button>
-        </form>
+        {success ? (
+          <>
+            <div className='alert alert-success mb-2'>
+              Deine Klasse wurde erfolgreich importiert
+            </div>
+            <button className='btn btn-primary' onClick={toggle}>
+              Schliessen
+            </button>
+          </>
+        ) : (
+          <form
+            className='p-2'
+            onSubmit={async (e) => {
+              try {
+                e.preventDefault();
+                await importStudentClick(data, students, update, remove);
+                changeSuccess(true);
+              } catch (err: any) {
+                changeError(err.message);
+              }
+            }}
+          >
+            {error && <div className='alert alert-error mb-2'>{error}</div>}
+            <div className='alert alert-info mb-2'>
+              Wenn die eine Klasse kopiert hast (z.B auf IOS Geräten), kannst du
+              sie in das Textfeld einfügen.
+            </div>
+            <input
+              autoFocus
+              className='input mb-2 w-full'
+              onChange={(e) => changeData(e.target.value)}
+            ></input>
+            <button type='submit' className='btn btn-primary'>
+              Importieren
+            </button>
+          </form>
+        )}
       </Modal>
     </div>
   );

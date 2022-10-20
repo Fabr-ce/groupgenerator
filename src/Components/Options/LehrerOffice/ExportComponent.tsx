@@ -9,10 +9,17 @@ export default function ExportComponent({ value }: { value: string }) {
 
   return (
     <div className='mt-4'>
+      <div className='alert alert-info block'>
+        Bei <span className='font-bold inline'>Android</span> Geräten kann der
+        Qr-Code gescannt werden. Die Klasse wird dann automatisch mit dem App
+        synchronisiert. <br />
+        Bei <span className='font-bold inline'>IOS</span> Geräten muss die
+        Klasse kopiert und mit "KLASSE IMPORTIEREN" importiert werden.
+      </div>
       <div className='w-full flex justify-center'>
         <QRCode
-          //value={'https://groupgenerator.surge.sh/import/' + value}
-          value={'http://192.168.0.193:3000/import/' + value}
+          value={'https://groupgenerator.surge.sh/import/' + value}
+          //value={'http://192.168.0.193:3000/import/' + value}
           logoImage={logo}
           size={285}
           quietZone={10}

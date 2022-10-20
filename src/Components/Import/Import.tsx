@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStudent } from '../helpers/Context';
 import { importStudentClick } from '../Options/LehrerOffice/ClassImport';
@@ -9,19 +9,20 @@ export default function Import() {
   const navigate = useNavigate();
   const { data } = useParams();
 
-  const importFunc = async () => {
-    if (!data || loading) return;
-    return importStudentClick(data, stundents, update, remove).then((res) =>
-      navigate('/')
-    );
-  };
-
-  const importData = debounce(importFunc, 500);
+  const importData = useCallback(
+    debounce(async () => {
+      if (!data || loading) return;
+      return importStudentClick(data, stundents, update, remove).then(() =>
+        navigate('/')
+      );
+    }, 500),
+    [data, loading, stundents, update, remove, navigate]
+  );
 
   useEffect(() => {
     importData().catch((err) => {});
     return importData.cancel;
-  }, [data, loading, stundents, update, remove, navigate]);
+  }, [importData]);
 
   return <div className='p-4 text-xl'>Importiere die Klasse ...</div>;
 }

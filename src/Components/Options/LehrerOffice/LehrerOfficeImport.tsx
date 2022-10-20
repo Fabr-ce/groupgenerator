@@ -5,6 +5,7 @@ import { Modal } from '../../helpers/Modal';
 import { encode, minifyObj } from './minifyObj';
 import { exportStudents } from './exportStudents';
 import ExportComponent from './ExportComponent';
+import { Loading } from '../../helpers/Loading';
 
 export default function LehrerOfficeImport() {
   const {
@@ -14,6 +15,7 @@ export default function LehrerOfficeImport() {
     remove,
     update,
   } = useStudent();
+  const [loadingImport, changeLoading] = useState(false);
   const [open, changeOpen] = useState(false);
   const [confirmed, changeConfirmed] = useState(false);
   const [err, changeErr] = useState('');
@@ -26,9 +28,12 @@ export default function LehrerOfficeImport() {
 
   const importFromLO = async () => {
     try {
+      changeLoading(true);
       await importFromLehrerOffice(students, update, remove);
     } catch (err: any) {
       changeErr(err.message);
+    } finally {
+      changeLoading(false);
     }
   };
 
@@ -53,16 +58,19 @@ export default function LehrerOfficeImport() {
       <Modal title='Klasse importieren' toggle={toggle} open={open}>
         {confirmed ? (
           <div className='p-2'>
-            {err && <div className='alert alert-error'>{err}</div>}
-            {!err && (
+            {loadingImport ? (
+              <Loading />
+            ) : (
               <>
-                <div className='alert alert-success'>
-                  Deine Klasse wurde erfolgreich erstellt. <br />
-                  Scanne den folgenden QR-Code dem App auf dem Handy um die
-                  Klasse zu übertragen. Alertnativ kannst du die Klasse auch
-                  Kopieren und versenden.
-                </div>
-                {qrCode && <ExportComponent value={qrCode} />}
+                {err && <div className='alert alert-error'>{err}</div>}
+                {!err && (
+                  <>
+                    <div className='alert alert-success'>
+                      Deine Klasse wurde erfolgreich erstellt.
+                    </div>
+                    {qrCode && <ExportComponent value={qrCode} />}
+                  </>
+                )}
               </>
             )}
           </div>

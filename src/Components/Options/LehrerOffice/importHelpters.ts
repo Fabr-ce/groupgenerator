@@ -18,7 +18,6 @@ interface LehrerOfficeType {
 
 export const importFromLehrerOffice = async (students: StudentType[], update: (item: StudentType) => Promise<void>, remove: (id: number) => Promise<void>) => {
     const text = await navigator.clipboard.readText();
-    console.log(text)
     const lines = text.split('\n');
     if (lines.length < 4) throw new Error("Bitte kopiere die Tabelle vom LehrerOffice nochmals!")
     const subjectInds = getSubjectIndices(lines);
@@ -78,7 +77,6 @@ const getSubjectIndices = (arr: string[]) => {
     arr.shift();
     const subjectLine = arr.shift()?.split('\t');
     if (!subjectLine) throw new Error('Bitte kopiere die Tabelle vom LehrerOffice nochmals!');
-    console.log(subjectLine)
 
     const subjectCols = subjects.map((s) => subjectLine.indexOf(s));
 
@@ -154,11 +152,16 @@ const getShortestName = (student: LehrerOfficeType, students: LehrerOfficeType[]
 
 
 const clearStudents = async (students: StudentType[], remove: (id: number) => Promise<void>) => {
-    const promise = students.map(s => remove(s.id))
-    return Promise.all(promise);
+    for (const student of students) {
+        await remove(student.id)
+    }
+    return null;
 }
 
 const createStudents = async (students: StudentExport[], update: (item: StudentType) => Promise<void>) => {
-    const promise = students.map((s, i) => update({ id: i + 1, active: true, name: s.name, skills: s.skills }))
-    return Promise.all(promise);
+    let i = 0;
+    for (const { name, skills } of students) {
+        await update({ id: ++i, active: true, name, skills })
+    }
+    return null;
 }

@@ -99,7 +99,7 @@ export const useItem = <T extends {}>(db: string, id: number) => {
   return { loading: load || loading, data };
 };
 
-export const useChangeItem = <T extends {}>(
+export const useChangeItem = <T extends { id: number }>(
   db: string
 ): [typeof putData, { loading: boolean; data: T[] }] => {
   const [load, changeLoading] = useState(true);
@@ -110,7 +110,7 @@ export const useChangeItem = <T extends {}>(
     if (loading || !indexDB) throw new Error('Not loaded');
     changeLoading(true);
     const data = await indexDB.putValue(db, item);
-    changeData(data);
+    changeData((oldData) => [...oldData.filter((d) => d.id !== item.id), data]);
     changeLoading(false);
     return data;
   };
@@ -118,7 +118,7 @@ export const useChangeItem = <T extends {}>(
   return [putData, { loading: load || loading, data }];
 };
 
-export const useDeleteItem = <T extends {}>(
+export const useDeleteItem = <T extends { id: number }>(
   db: string
 ): [typeof deleteData, { loading: boolean; data: T[] }] => {
   const [load, changeLoading] = useState(true);
@@ -127,8 +127,8 @@ export const useDeleteItem = <T extends {}>(
 
   const deleteData = async (id: number) => {
     changeLoading(true);
-    const data = await indexDB.deleteValue(db, id);
-    changeData(data);
+    await indexDB.deleteValue(db, id);
+    changeData((oldData) => oldData.filter((d) => d.id !== id));
     changeLoading(false);
   };
 
