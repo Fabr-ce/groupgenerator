@@ -1,12 +1,13 @@
 import { useState, createContext, useContext, useEffect } from 'react';
 import {
+  classDB,
   studentDB,
   thopicDB,
   useAllItems,
   useChangeItem,
   useDeleteItem,
 } from './IndexdbContext';
-import { StudentType, ThopicType } from '../types';
+import { ClassType, StudentType, ThopicType } from '../types';
 
 interface ItemType {
   id: number;
@@ -40,14 +41,28 @@ const ThopicContext = createContext<ItemContext<ThopicType>>({
   remove: async () => {},
 });
 
+const ClassContext = createContext<ItemContext<ClassType>>({
+  all: [],
+  filtered: [],
+  loading: true,
+  specificLoading: false,
+  update: async () => {},
+  remove: async () => {},
+});
+
 export const DataProvider = ({ children }: { children: JSX.Element }) => {
   const student = useItems<StudentType>(studentDB);
   const thopic = useItems<ThopicType>(thopicDB);
+  const classe = useItems<ClassType>(classDB);
 
   return (
-    <StudentContext.Provider value={student}>
-      <ThopicContext.Provider value={thopic}>{children}</ThopicContext.Provider>
-    </StudentContext.Provider>
+    <ClassContext.Provider value={classe}>
+      <StudentContext.Provider value={student}>
+        <ThopicContext.Provider value={thopic}>
+          {children}
+        </ThopicContext.Provider>
+      </StudentContext.Provider>
+    </ClassContext.Provider>
   );
 };
 
@@ -101,6 +116,17 @@ export const useStudent = () => {
   return useContext(StudentContext);
 };
 
+export const useClassStudent = (classId?: number) => {
+  const { all: oldAll, filtered: oldFiltered, ...rest } = useStudent();
+  const all = oldAll.filter((s) => !classId || s.classId === classId);
+  const filtered = oldFiltered.filter((s) => !classId || s.classId === classId);
+  return { all, filtered, ...rest };
+};
+
 export const useThopic = () => {
   return useContext(ThopicContext);
+};
+
+export const useClass = () => {
+  return useContext(ClassContext);
 };

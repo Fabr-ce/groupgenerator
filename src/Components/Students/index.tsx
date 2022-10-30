@@ -5,12 +5,24 @@ import { Link } from 'react-router-dom';
 import { Student } from './Student';
 import { EditModal } from '../helpers/Modal';
 import { Loading } from '../helpers/Loading';
-import { useStudent, useThopic } from '../helpers/Context/DataContext';
+import {
+  useClass,
+  useClassStudent,
+  useThopic,
+} from '../helpers/Context/DataContext';
 import { BsPersonPlusFill } from 'react-icons/bs';
+import { useOptions } from '../helpers/Context';
 
 export default function Students() {
-  const { all: students, update: updateStudent, loading: loadS } = useStudent();
   const { filtered: thopics, loading: loadT } = useThopic();
+  const { filtered: classes, loading: loadC } = useClass();
+  const { options, changeOption } = useOptions();
+
+  const {
+    all: students,
+    update: updateStudent,
+    loading: loadS,
+  } = useClassStudent(options.classId);
 
   const [selectedThopic, changeThopic] = useState<ThopicType['id'] | null>(
     null
@@ -34,10 +46,25 @@ export default function Students() {
         </h2>
       </div>
 
-      {loadS || loadT ? (
+      {loadS || loadT || loadC ? (
         <Loading />
       ) : (
         <div className='max-w-xs mx-auto'>
+          {options.multipleClass && classes.length > 1 && (
+            <select
+              className='select select-bordered w-full mb-5'
+              value={options.classId}
+              onChange={(e) =>
+                changeOption('classId', parseInt(e.target.value))
+              }
+            >
+              {classes.map((cla) => (
+                <option key={cla.id} value={cla.id}>
+                  {cla.name}
+                </option>
+              ))}
+            </select>
+          )}
           <div className='font-bold text-lg pb-3'>
             {activeCount}/{students.length} Schüler/innen anwesend
           </div>
@@ -84,6 +111,7 @@ export default function Students() {
               updateStudent({
                 id: students[students.length - 1]?.id + 1 || 1,
                 name: newStudent.name,
+                classId: options.classId,
                 active: true,
                 skills: {},
               });

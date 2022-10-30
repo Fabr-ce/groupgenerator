@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useStudent } from '../../helpers/Context';
+import { useClass, useOptions, useStudent } from '../../helpers/Context';
 import { importFromLehrerOffice } from './importHelpters';
 import { Modal } from '../../helpers/Modal';
 import { encode, minifyObj } from './minifyObj';
@@ -15,6 +15,9 @@ export default function LehrerOfficeImport() {
     remove,
     update,
   } = useStudent();
+  const { all: classes, update: updateClass } = useClass();
+  const { options } = useOptions();
+
   const [loadingImport, changeLoading] = useState(false);
   const [open, changeOpen] = useState(false);
   const [confirmed, changeConfirmed] = useState(false);
@@ -29,7 +32,19 @@ export default function LehrerOfficeImport() {
   const importFromLO = async () => {
     try {
       changeLoading(true);
-      await importFromLehrerOffice(students, update, remove);
+      let classId = options.classId;
+      let studentList = students;
+
+      if (options.multipleClass) {
+        classId = classes[classes.length - 1].id + 1;
+        await updateClass({
+          id: classId,
+          active: true,
+          name: 'Klasse ' + classId,
+        });
+        studentList = [];
+      }
+      await importFromLehrerOffice(studentList, classId, update, remove);
     } catch (err: any) {
       changeErr(err.message);
     } finally {

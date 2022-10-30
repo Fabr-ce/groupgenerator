@@ -16,7 +16,7 @@ interface LehrerOfficeType {
     subjects: { [key: string]: number };
 }
 
-export const importFromLehrerOffice = async (students: StudentType[], update: (item: StudentType) => Promise<void>, remove: (id: number) => Promise<void>) => {
+export const importFromLehrerOffice = async (students: StudentType[], classId: number, update: (item: StudentType) => Promise<void>, remove: (id: number) => Promise<void>) => {
     const text = await navigator.clipboard.readText();
     const lines = text.split('\n');
     if (lines.length < 4) throw new Error("Bitte kopiere die Tabelle vom LehrerOffice nochmals!")
@@ -62,14 +62,14 @@ export const importFromLehrerOffice = async (students: StudentType[], update: (i
         }
     }
 
-    await renewStudents(students, resultStudents, update, remove)
+    await renewStudents(students, resultStudents, classId, update, remove)
     return resultStudents;
 }
 
-export const renewStudents = async (students: StudentType[], resultStudents: StudentExport[], update: (item: StudentType) => Promise<void>, remove: (id: number) => Promise<void>) => {
+export const renewStudents = async (students: StudentType[], resultStudents: StudentExport[], classId: number, update: (item: StudentType) => Promise<void>, remove: (id: number) => Promise<void>) => {
     //remove all current students
     await clearStudents(students, remove)
-    await createStudents(resultStudents, update);
+    await createStudents(resultStudents, classId, update);
 }
 
 
@@ -151,17 +151,17 @@ const getShortestName = (student: LehrerOfficeType, students: LehrerOfficeType[]
 }
 
 
-const clearStudents = async (students: StudentType[], remove: (id: number) => Promise<void>) => {
+export const clearStudents = async (students: StudentType[], remove: (id: number) => Promise<void>) => {
     for (const student of students) {
         await remove(student.id)
     }
     return null;
 }
 
-const createStudents = async (students: StudentExport[], update: (item: StudentType) => Promise<void>) => {
+export const createStudents = async (students: StudentExport[], classId: number, update: (item: StudentType) => Promise<void>) => {
     let i = 0;
     for (const { name, skills } of students) {
-        await update({ id: ++i, active: true, name, skills })
+        await update({ id: ++i, classId, active: true, name, skills })
     }
     return null;
 }

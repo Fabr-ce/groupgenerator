@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useState } from 'react';
 import { useStudent } from '../../helpers/Context';
 import { Loading } from '../../helpers/Loading';
@@ -6,8 +7,17 @@ import ExportComponent from './ExportComponent';
 import { exportStudents } from './exportStudents';
 import { minifyObj } from './minifyObj';
 
-export default function ClassExport() {
-  const { all: students, loading } = useStudent();
+export default function ClassExport({
+  name,
+  className,
+  classId,
+}: {
+  name?: string;
+  className?: string;
+  classId?: number;
+}) {
+  const { all: allStudents, loading } = useStudent();
+  const students = allStudents.filter((s) => !classId || s.classId === classId);
   const [open, changeOpen] = useState(false);
   const toggle = () => changeOpen(!open);
   const [qrCode, changeQrCode] = useState('');
@@ -22,7 +32,7 @@ export default function ClassExport() {
   return (
     <>
       <button
-        className='btn'
+        className={classNames('btn', className)}
         onClick={() => {
           if (loading) return;
           exportClass();
@@ -30,7 +40,7 @@ export default function ClassExport() {
         }}
         disabled={loading}
       >
-        {loading ? <Loading /> : 'Klasse Exportieren'}
+        {loading ? <Loading /> : name || 'Klasse Exportieren'}
       </button>
       <Modal title='Klasse Exportieren' toggle={toggle} open={open}>
         {qrCode && <ExportComponent value={qrCode} />}

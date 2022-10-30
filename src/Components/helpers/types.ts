@@ -2,12 +2,19 @@ export interface StudentType {
     id: number;
     name: string;
     active: boolean;
-    skills: { [key: string]: number };
+    classId: number;
+    skills: { [thopicId: number]: number };
 }
 
 
 
 export interface ThopicType {
+    id: number;
+    name: string;
+    active: boolean;
+}
+
+export interface ClassType {
     id: number;
     name: string;
     active: boolean;

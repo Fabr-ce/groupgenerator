@@ -7,21 +7,19 @@ import { DeleteModal, EditModal } from '../helpers/Modal';
 import { useStudent } from '../helpers/Context/index';
 
 export const Student = ({
-  id,
-  name,
-  active,
-  skills,
   thopics,
   selectedThopic,
+  ...student
 }: StudentType & {
   selectedThopic: ThopicType['id'] | null;
   thopics: ThopicType[];
 }) => {
+  const { active } = student;
   const [showContent, changeContent] = useState(false);
   const [showEdit, changeEdit] = useState(false);
   const [showDelete, changeDelete] = useState(false);
 
-  const [editName, changeName] = useState(name);
+  const [editName, changeName] = useState(student.name);
 
   const { update: updateStudent, remove: deleteStudent } = useStudent();
 
@@ -37,24 +35,21 @@ export const Student = ({
         className={classnames('flex justify-between items-center gap-4')}
         onClick={() => changeContent(!showContent)}
       >
-        <div className='text-lg font-bold flex-grow'>{name}</div>
+        <div className='text-lg font-bold flex-grow'>{student.name}</div>
         {selectedThopic && (
-          <ThopicSelector
-            thopicId={selectedThopic}
-            student={{ id, name, active, skills }}
-          />
+          <ThopicSelector thopicId={selectedThopic} student={student} />
         )}
         <div className='cursor-pointer' onClick={(e) => e.stopPropagation()}>
           {active ? (
             <BiShow
               size='1.5em'
-              onClick={() => updateStudent({ id, name, skills, active: false })}
+              onClick={() => updateStudent({ ...student, active: false })}
             />
           ) : (
             <BiHide
               size='1.5em'
               className='text-white/40'
-              onClick={() => updateStudent({ id, name, skills, active: true })}
+              onClick={() => updateStudent({ ...student, active: true })}
             />
           )}
         </div>
@@ -64,10 +59,7 @@ export const Student = ({
           {thopics.map((thopic) => (
             <div key={thopic.id} className='mb-2 flex justify-between'>
               <div className='align-center my-auto'>{thopic.name}</div>
-              <ThopicSelector
-                thopicId={thopic.id}
-                student={{ id, name, active, skills }}
-              />
+              <ThopicSelector thopicId={thopic.id} student={student} />
             </div>
           ))}
           <div className='btn opacity-70 mr-2' onClick={() => changeEdit(true)}>
@@ -85,19 +77,19 @@ export const Student = ({
             name={editName}
             open={showEdit}
             toggle={() => {
-              changeName(name);
+              changeName(student.name);
               changeEdit((old) => !old);
             }}
-            submit={() => updateStudent({ id, name: editName, skills, active })}
+            submit={() => updateStudent({ ...student, name: editName })}
           />
           <DeleteModal
             title='Schüler/in bearbeiten'
-            name={name}
+            name={student.name}
             open={showDelete}
             toggle={() => {
               changeDelete((old) => !old);
             }}
-            submit={() => deleteStudent(id)}
+            submit={() => deleteStudent(student.id)}
           />
         </div>
       )}

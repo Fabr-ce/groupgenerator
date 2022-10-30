@@ -21,12 +21,12 @@ export const ThopicSelector = ({
   thopicId: ThopicType['id'];
   student: StudentType;
 }) => {
-  const { id, skills, name, active } = student;
+  const { skills } = student;
   const { update } = useStudent();
   const handleSkill = (thopicId: ThopicType['id']) => {
     return (e: React.ChangeEvent<HTMLSelectElement>) => {
       const newSkill = { ...skills, [thopicId]: parseInt(e.target.value) };
-      update({ id, name, active, skills: newSkill });
+      update({ ...student, skills: newSkill });
     };
   };
 

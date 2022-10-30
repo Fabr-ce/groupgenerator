@@ -13,6 +13,9 @@ type settingsInput = { students: StudentType[] } & Options
 
 
 const main = ({ students, ...options }: settingsInput): StudentType[][] => {
+    if (options.multipleClass) {
+        students = students.filter(s => s.classId === options.classId)
+    }
     const encodedStudents = encodeStudents(students, options.thopicId)
     const groupAssignment = calculateAssignment(encodedStudents, options)
     groupAssignment.sort((a, b) => b.count - a.count)

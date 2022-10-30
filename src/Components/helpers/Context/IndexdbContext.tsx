@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import IndexedDB from './db';
-import { ThopicType } from '../types';
+import { ClassType, ThopicType } from '../types';
 
 const IndexDBContext = createContext<{
   loading: boolean;
@@ -28,8 +28,17 @@ const groupThemes: ThopicType[] = [
   },
 ];
 
+const defaultClasses: ClassType[] = [
+  {
+    id: 1,
+    name: 'Klasse 1',
+    active: true,
+  },
+];
+
 export const studentDB = 'studentDB';
 export const thopicDB = 'thopicDB';
+export const classDB = 'classDB';
 
 const indexDB = new IndexedDB('group generator');
 
@@ -37,18 +46,35 @@ export const AppContextProvider = ({ children }: { children: JSX.Element }) => {
   const [loading, changeLoading] = useState(true);
 
   useEffect(() => {
-    indexDB.createObjectStore([studentDB, thopicDB]).then(async (res) => {
-      if (res === false) {
-        console.error('Not able to load DB');
-      } else {
-        //insert base
-        const thopics = await indexDB.getAllValue(thopicDB);
-        if (thopics.length === 0) {
-          await indexDB.putBulkValue(thopicDB, groupThemes);
+    indexDB
+      .createObjectStore([studentDB, thopicDB, classDB])
+      .then(async (res) => {
+        if (res === false) {
+          console.error('Not able to load DB');
+        } else {
+          //insert base
+          const thopics = await indexDB.getAllValue(thopicDB);
+          if (thopics.length === 0) {
+            await indexDB.putBulkValue(thopicDB, groupThemes);
+          }
+
+          const classes = await indexDB.getAllValue(classDB);
+          if (classes.length === 0) {
+            await indexDB.putBulkValue(classDB, defaultClasses);
+          }
+
+          //migrate to classes
+          const students = await indexDB.getAllValue(studentDB);
+          const noClass = students
+            .filter((s: any) => !s.classId)
+            .map((s: any) => ({ ...s, classId: 1 }));
+          if (noClass.length > 0) {
+            await indexDB.putBulkValue(studentDB, noClass);
+          }
+
+          changeLoading(false);
         }
-        changeLoading(false);
-      }
-    });
+      });
   }, []);
 
   return (

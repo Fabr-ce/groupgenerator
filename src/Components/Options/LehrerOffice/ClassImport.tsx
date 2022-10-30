@@ -1,5 +1,6 @@
+import classNames from 'classnames';
 import React, { useState } from 'react';
-import { useStudent } from '../../helpers/Context';
+import { useClass, useClassStudent, useOptions } from '../../helpers/Context';
 import { Modal } from '../../helpers/Modal';
 import { StudentType } from '../../helpers/types';
 import { renewStudents } from './importHelpters';
@@ -8,6 +9,7 @@ import { decode, parseStr } from './minifyObj';
 export const importStudentClick = async (
   data: string,
   students: StudentType[],
+  classId: number,
   update: (item: StudentType) => Promise<void>,
   remove: (id: number) => Promise<void>
 ) => {
@@ -22,11 +24,22 @@ export const importStudentClick = async (
     );
   }
 
-  await renewStudents(students, resultStudents, update, remove);
+  await renewStudents(students, resultStudents, classId, update, remove);
 };
 
-export default function ClassImport() {
-  const { all: students, update, remove } = useStudent();
+export default function ClassImport({
+  name,
+  className,
+  classId,
+}: {
+  name?: string;
+  className?: string;
+  classId?: number;
+}) {
+  const { all: students, update, remove } = useClassStudent(classId);
+  const { all: classes, update: updateClass } = useClass();
+  const { options } = useOptions();
+
   const [open, changeOpen] = useState(false);
   const [success, changeSuccess] = useState(false);
   const [error, changeError] = useState('');
@@ -40,12 +53,12 @@ export default function ClassImport() {
   return (
     <div>
       <div
-        className='btn'
+        className={classNames('btn', className)}
         onClick={() => {
           toggle();
         }}
       >
-        Klasse importieren
+        {name ? name : 'Klasse importieren'}
       </div>
       <Modal title='Klasse importieren' toggle={toggle} open={open}>
         {success ? (
@@ -63,7 +76,26 @@ export default function ClassImport() {
             onSubmit={async (e) => {
               try {
                 e.preventDefault();
-                await importStudentClick(data, students, update, remove);
+                classId = classId || options.classId;
+                let studentList = students;
+
+                if (options.multipleClass && !classId) {
+                  classId = classes[classes.length - 1].id + 1;
+                  await updateClass({
+                    id: classId,
+                    active: true,
+                    name: 'Klasse ' + classId,
+                  });
+                  studentList = [];
+                }
+                await importStudentClick(
+                  data,
+                  studentList,
+                  classId,
+                  update,
+                  remove
+                );
+
                 changeSuccess(true);
               } catch (err: any) {
                 changeError(err.message);

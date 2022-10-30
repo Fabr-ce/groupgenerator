@@ -71,7 +71,7 @@ export const Thopic = ({ id, name, active }: ThopicType) => {
             submit={() => changeThopic({ id, name: editName, active })}
           />
           <DeleteModal
-            title='Thema bearbeiten'
+            title='Thema löschen'
             name={name}
             open={showDelete}
             toggle={() => {

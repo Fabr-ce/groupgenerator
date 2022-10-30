@@ -2,19 +2,24 @@ import React from 'react';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import { Loading } from '../helpers/Loading';
-import { useStudent, useThopic, useOptions } from '../helpers/Context/index';
+import {
+  useThopic,
+  useOptions,
+  useClass,
+  useClassStudent,
+} from '../helpers/Context/index';
 import { GroupSelection, GroupType } from '../helpers/types';
 import { IoMdSettings, IoMdSwap } from 'react-icons/io';
 
 export default function Home() {
-  const { options, changeOptions } = useOptions();
+  const { options, changeOption } = useOptions();
   const { filtered: thopics, loading: loadT } = useThopic();
-  const { all, filtered: students, loading: loadS } = useStudent();
-
-  const handleChange = (field: string) => {
-    return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-      changeOptions({ ...options, [field]: e.target.value });
-  };
+  const { filtered: classes, loading: loadC } = useClass();
+  const {
+    all,
+    filtered: students,
+    loading: loadS,
+  } = useClassStudent(options.classId);
 
   return (
     <div className='p-3 mt-5'>
@@ -32,6 +37,31 @@ export default function Home() {
           {!loadS && '(' + students.length + '/' + all.length + ')'}
         </Link>
 
+        {options.multipleClass && (loadC || classes.length > 1) && (
+          <div className='form-control w-full pb-5'>
+            <label className='label'>
+              <span className='label-text'>Klasse</span>
+            </label>
+            {loadC ? (
+              <Loading />
+            ) : (
+              <select
+                className='select select-bordered w-full'
+                value={options.classId}
+                onChange={(e) =>
+                  changeOption('classId', parseInt(e.target.value))
+                }
+              >
+                {classes.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        )}
+
         <div className='w-full flex gap-2 items-end'>
           {options.groupSelection === GroupSelection.GroupSize ? (
             <div className='form-control flex-grow'>
@@ -43,7 +73,7 @@ export default function Home() {
               <select
                 className='select select-bordered w-full'
                 value={options.groupSize}
-                onChange={handleChange('groupSize')}
+                onChange={(e) => changeOption('groupSize', e.target.value)}
               >
                 {new Array(9).fill(0).map((z, i) => (
                   <option key={i}>{i + 2}</option>
@@ -58,7 +88,7 @@ export default function Home() {
               <select
                 className='select select-bordered w-full'
                 value={options.groupNumber}
-                onChange={handleChange('groupNumber')}
+                onChange={(e) => changeOption('groupNumber', e.target.value)}
               >
                 {new Array(9).fill(0).map((z, i) => (
                   <option key={i}>{i + 2}</option>
@@ -70,10 +100,7 @@ export default function Home() {
           <div
             className='btn btn-square'
             onClick={() =>
-              changeOptions({
-                ...options,
-                groupSelection: 1 - options.groupSelection,
-              })
+              changeOption('groupSelection', 1 - options.groupSelection)
             }
           >
             <IoMdSwap size='2em' />
@@ -86,12 +113,7 @@ export default function Home() {
           </label>
           <div className='btn-group w-full'>
             <button
-              onClick={() =>
-                changeOptions({
-                  ...options,
-                  groupType: GroupType.Heterogene,
-                })
-              }
+              onClick={() => changeOption('groupType', GroupType.Heterogene)}
               className={classnames('btn flex-grow', {
                 'btn-active': options.groupType === GroupType.Heterogene,
               })}
@@ -99,12 +121,7 @@ export default function Home() {
               Heterogen
             </button>
             <button
-              onClick={() =>
-                changeOptions({
-                  ...options,
-                  groupType: GroupType.Homogene,
-                })
-              }
+              onClick={() => changeOption('groupType', GroupType.Homogene)}
               className={classnames('btn flex-grow', {
                 'btn-active': options.groupType === GroupType.Homogene,
               })}
@@ -124,10 +141,14 @@ export default function Home() {
             <select
               className='select select-bordered w-full'
               value={options.thopicId}
-              onChange={handleChange('thopicId')}
+              onChange={(e) =>
+                changeOption('thopicId', parseInt(e.target.value))
+              }
             >
               {thopics.map((thopic) => (
-                <option key={thopic.id}>{thopic.name}</option>
+                <option key={thopic.id} value={thopic.id}>
+                  {thopic.name}
+                </option>
               ))}
             </select>
           )}
