@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, useEffect } from 'react';
+import { useState, createContext, useContext, useEffect, useMemo } from 'react';
 import {
   classDB,
   studentDB,
@@ -118,8 +118,14 @@ export const useStudent = () => {
 
 export const useClassStudent = (classId?: number) => {
   const { all: oldAll, filtered: oldFiltered, ...rest } = useStudent();
-  const all = oldAll.filter((s) => !classId || s.classId === classId);
-  const filtered = oldFiltered.filter((s) => !classId || s.classId === classId);
+  const all = useMemo(
+    () => oldAll.filter((s) => !classId || s.classId === classId),
+    [oldAll, classId]
+  );
+  const filtered = useMemo(
+    () => oldFiltered.filter((s) => !classId || s.classId === classId),
+    [oldFiltered, classId]
+  );
   return { all, filtered, ...rest };
 };
 

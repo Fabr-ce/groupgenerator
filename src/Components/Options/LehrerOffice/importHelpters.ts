@@ -159,7 +159,7 @@ export const clearStudents = async (students: StudentType[], remove: (id: number
 }
 
 export const createStudents = async (students: StudentExport[], classId: number, update: (item: StudentType) => Promise<void>) => {
-    let i = 0;
+    let i = (classId - 1) * 50;
     for (const { name, skills } of students) {
         await update({ id: ++i, classId, active: true, name, skills })
     }

@@ -2,12 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { MdOutlineArrowBack } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import main from '../../Logic/main';
-import { useOptions, useStudent } from '../helpers/Context/index';
+import {
+  useClassStudent,
+  useOptions,
+  useStudent,
+} from '../helpers/Context/index';
 import { GroupSelection, StudentType } from '../helpers/types';
 
 export default function Groups() {
   const { options } = useOptions();
-  const { filtered: students } = useStudent();
+  const { filtered: students } = useClassStudent(options.classId);
 
   const [loading, changeLoading] = useState(true);
 
