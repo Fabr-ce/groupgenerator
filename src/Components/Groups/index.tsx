@@ -41,22 +41,26 @@ export default function Groups() {
         <h2 className='text-2xl font-bold text-center pl-4'>Gruppen</h2>
       </div>
 
-      <div className='max-w-xs mx-auto'>
-        {groupAssignment.map((group, ind) => (
-          <div key={group[0].id} className='bg-primary rounded p-4 mb-3'>
-            <h3 className='text-center text-2xl'>Gruppe {ind + 1}</h3>
-            <div className='grid gap-4 grid-cols-3 mt-3'>
-              {group.map((student) => (
-                <div key={student.id} className='font-bold text-xl pb-1'>
-                  {student.name}
-                </div>
-              ))}
+      <div className='mx-auto px-5'>
+        <div className='grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+          {groupAssignment.map((group, ind) => (
+            <div key={group[0].id} className='bg-primary rounded p-4 w-full'>
+              <h3 className='text-center text-2xl'>Gruppe {ind + 1}</h3>
+              <div className='grid gap-4 grid-cols-3 mt-3'>
+                {group.map((student) => (
+                  <div key={student.id} className='font-bold text-xl pb-1'>
+                    {student.name}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-
+          ))}
+        </div>
         {groupAssignment.length > 0 && (
-          <div className='btn btn-block' onClick={() => generateAssignemnt}>
+          <div
+            className='btn btn-block mt-4'
+            onClick={() => generateAssignemnt()}
+          >
             Durchmischen
           </div>
         )}
